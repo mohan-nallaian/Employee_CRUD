@@ -1,0 +1,87 @@
+﻿@page "/DeleteEmployee/{Id}"
+@using EmployeeCrud.Data
+@inject EmployeeService employeeService
+@inject NavigationManager NavigationManager
+
+
+<h3>Delete Employee</h3>
+
+<form action="/" method="post">
+	<div class="row">
+		<div class="col-md-10">
+			<div class="for-group">
+				<label for="Id" class="contol-label">Emp No </label>
+				<label>@Obj.Id</label>
+			</div>
+			<div class="for-group">
+				<label for="FirstName" class="contol-label">First Name</label>
+				<label>@Obj.FirstName</label>
+			</div>
+			<div class="for-group">
+				<label for="LastName" class="contol-label">Last Name</label>
+				<label>@Obj.LastName</label>
+			</div>
+			<div class="for-group">
+				<label for="Postalcode" class="contol-label">Postal Code</label>
+				<label>@Obj.PostalCode</label>
+			</div>
+			<div class="for-group">
+				<label for="Address" class="contol-label">Address</label>
+				<label>@Obj.Address</label>
+			</div>
+			<div class="for-group">
+				<label for="EmailAddress" class="contol-label">Email Address</label>
+				<label>@Obj.EmailAddress</label>
+			</div>
+			<div class="for-group">
+				<label for="PhoneNumber" class="contol-label">Phone Number</label>
+				<label>@Obj.PhoneNumber</label> 
+			</div>
+			<div class="for-group">
+				<label for="City" class="contol-label">City</label>
+				<label>@Obj.City</label> 
+			</div>
+			<div class="for-group">
+				<label for="Designation" class="contol-label">Designation</label>
+				<label>@Obj.Designation</label> 
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-10">
+			<div class="form-group">
+				<input type="button" class="btn btn-primary" @onclick="@DeleteEmployeeRecord" value="Delete Employee" />
+				<input type="button" class="btn btn-danger" @onclick=@Cancel value="Cancel" />
+
+			</div>
+		</div>
+	</div>
+</form>
+
+
+
+@code {
+
+	[Parameter]
+	public string Id { get; set; }
+	Employee Obj = new Employee();
+	protected override async Task OnInitializedAsync()
+	{
+		Obj = await Task.Run(() => employeeService.GetEmployeeById(Convert.ToInt32(Id)));
+
+	}
+
+
+	protected async void DeleteEmployeeRecord()
+	{
+		await employeeService.DeleteEmployee(Obj);
+
+		NavigationManager.NavigateTo("Employees");
+	}
+
+	protected async void Cancel()
+	{
+		NavigationManager.NavigateTo("Employees");
+	}
+
+}
